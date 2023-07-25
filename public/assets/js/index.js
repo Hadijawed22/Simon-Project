@@ -11,7 +11,7 @@ $(document).keydown(function(){
         nextSequence();
         started=true;
     }
-})
+});
 $(".btn").click(function () {
 
     var userChosenColour = $(this).attr("id");
@@ -19,17 +19,18 @@ $(".btn").click(function () {
     playSound(userChosenColour);
 
     animatePress(userChosenColour);
-})
+    checkAnswer(userClickedPattern.length - 1);
+});
 function checkAnswer(currentLevel){
     if (gamePattern[currentLevel]===userClickedPattern[currentLevel]){
-        console.lof("SUCCESS");
+        console.log("success");
         if (userClickedPattern.length===gamePattern.length){
             setTimeout(function () {
                 nextSequence();
               }, 1000);
         }
     }else{
-        console.log("WRONG");
+        console.log("wrong");
         playSound("wrong.mp3")
     
     
@@ -38,29 +39,31 @@ function checkAnswer(currentLevel){
         setTimeout(function () {
             $("body").removeClass("game-over");
         }, 200);
-        $("#level-title").text("Press Any Key To Restart");
+        $("#level-title").text("Game Over,Press Any Key To Restart");
     }
     }
-function nextSequence() {
-    level ++;
-    $("#level-title").text("Level " + level);
-    var randomNumber = Math.floor(Math.random() * 4);
-    var randomChosenColour = buttonColours[randomNumber];
-    gamePattern.push = (randomChosenColour);
+    function nextSequence() {
 
-
-    $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
-playSound(randomChosenColour);
-}
-function playSound(name) {
-    var audio = new Audio("sounds/" + name + ".mp3");
-    audio.play();
-}
-function animatePress(currentColor) {
-    $("#" + currentColor).addClass("pressed");
-
-
-    setTimeout(function () {
-        $("#" + currentColor).removeClass("pressed");
-    }, 100);
-}
+        userClickedPattern = [];
+        level++;
+        $("#level-title").text("Level " + level);
+      
+        var randomNumber = Math.floor(Math.random() * 4);
+        var randomChosenColour = buttonColours[randomNumber];
+        gamePattern.push(randomChosenColour);
+      
+        $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
+        playSound(randomChosenColour);
+      }
+      
+      function playSound(name) {
+        var audio = new Audio("sounds/" + name + ".mp3");
+        audio.play();
+      }
+      
+      function animatePress(currentColor) {
+        $("#" + currentColor).addClass("pressed");
+        setTimeout(function () {
+          $("#" + currentColor).removeClass("pressed");
+        }, 100);
+      }
